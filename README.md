@@ -44,68 +44,8 @@ Format: Tab-separated values with a time index column followed by 5 sensor colum
 
 FileConditionRowstest1.txtEmpty Bridge11,137test2.txtLight Traffic7,105test3.txtModerate Traffic13,921test4.txtHeavy Traffic3,361test5.txtSingle Heavy Vehicle7,809test6.txtMulti Heavy Vehicle4,129test7.txtPeak Hour Traffic12,289test8.txtNight Traffic6,593
 
-Project Pipeline
-    Raw Sensor Files (.txt)
-    
-        │
-        
-        ▼
-        
-Data Loading & Normalisation
-        
-        │
-        
-        ▼
+<img width="1024" height="1536" alt="image" src="https://github.com/user-attachments/assets/5802049d-721a-4b06-a2c9-80659627b8fd" />
 
-Exploratory Data Analysis (9 plots)
-
-        │
-        
-        ▼
-
-Windowing (200 samples, 75% overlap)
-
-        │
-       
-        ▼
-
-Feature Extraction (74 features per window)
-        
-        │
-
-        ▼
- 
- Train / Test Split (80/20, stratified)
- 
-        │
- 
-        ▼
- 
- Data Augmentation (noise + scaling, ×3)
-         
-        │
- 
-      ┌─┴──────────────┐
-      
-      ▼                ▼
-
-CNN-BiLSTM        Random Forest
-(raw sequences)   (74 features)
-
-      │                │
-      
-      └────────┬───────┘
-      
-               ▼
-       
-        ARIMA Forecasting
-        (per condition)
-        
-               │
-               
-               ▼
-    
-     Results & Comparison
 
 # Models
 # CNN-BiLSTM
