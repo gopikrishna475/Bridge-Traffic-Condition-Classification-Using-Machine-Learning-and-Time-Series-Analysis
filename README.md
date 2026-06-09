@@ -31,3 +31,73 @@ Dataset Source
 
 Bridge Vibration Monitoring Dataset
 DOI: 10.17632/d3by55pjh7.2
+Traffic Conditions
+ClassCondition0Empty Bridge1Light Traffic2Moderate Traffic3Heavy Traffic4Single Heavy Vehicle5Multi Heavy Vehicle6Peak Hour Traffic7Night Traffic
+
+Dataset
+
+Files: 8 text files (test1.txt – test8.txt), one per traffic condition
+Sensors: 5 accelerometer channels per file
+Sampling Rate: 200 Hz
+Total Samples: 66,344 rows across all conditions
+Format: Tab-separated values with a time index column followed by 5 sensor columns
+
+FileConditionRowstest1.txtEmpty Bridge11,137test2.txtLight Traffic7,105test3.txtModerate Traffic13,921test4.txtHeavy Traffic3,361test5.txtSingle Heavy Vehicle7,809test6.txtMulti Heavy Vehicle4,129test7.txtPeak Hour Traffic12,289test8.txtNight Traffic6,593
+
+Project Pipeline
+Raw Sensor Files (.txt)
+        │
+        ▼
+Data Loading & Normalisation
+        │
+        ▼
+Exploratory Data Analysis (9 plots)
+        │
+        ▼
+Windowing (200 samples, 75% overlap)
+        │
+        ▼
+Feature Extraction (74 features per window)
+        │
+        ▼
+Train / Test Split (80/20, stratified)
+        │
+        ▼
+Data Augmentation (noise + scaling, ×3)
+        │
+      ┌─┴──────────────┐
+      ▼                ▼
+CNN-BiLSTM        Random Forest
+(raw sequences)   (74 features)
+      │                │
+      └────────┬───────┘
+               ▼
+        ARIMA Forecasting
+        (per condition)
+               │
+               ▼
+     Results & Comparison
+
+# Models
+# CNN-BiLSTM
+
+Input: raw vibration sequences (200 timesteps × 5 sensors)
+Three Conv1D blocks with BatchNormalization and MaxPooling extract local vibration patterns
+Bidirectional LSTM captures temporal dependencies in both directions
+Dropout and L2 regularisation prevent overfitting
+EarlyStopping and ReduceLROnPlateau control training
+Hyperparameter search over 3 configurations
+
+# Random Forest
+
+Input: 74 handcrafted statistical and frequency-domain features
+GridSearchCV with 5-fold cross-validation for hyperparameter tuning
+Feature importance plot identifies the most discriminative signal characteristics
+Serves as an interpretable baseline model
+
+# ARIMA
+
+Applied separately per condition for time-series forecasting
+Tests whether future vibration values are predictable from past observations
+Best order selected automatically by AIC criterion
+Demonstrates limitations of linear models for heavy-vehicle conditions
